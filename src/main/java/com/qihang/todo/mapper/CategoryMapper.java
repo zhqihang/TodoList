@@ -1,38 +1,30 @@
 package com.qihang.todo.mapper;
 
 import com.qihang.todo.entity.Category;
-import org.apache.ibatis.annotations.Mapper;
-
+import com.qihang.todo.entity.CategoryExample;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-/**
- * @Author: zhqihang
- * @Date: 2024/06/08
- * @Project: TodoList
- * @Description: 清单 Mapper接口
- */
-
-@Mapper
 public interface CategoryMapper {
+    long countByExample(CategoryExample example);
 
-    /**
-     * 查询所有的清单
-     */
-    List<Category> getAllCategory();
+    int deleteByExample(CategoryExample example);
 
-    /**
-     * 添加一个清单分类
-     * */
-    void addCategory(Category category);
+    int deleteByPrimaryKey(Integer id);
 
-    /**
-     * 根据id删除一个清单分类
-     * */
-    void deleteCategoryById(int id);
+    int insert(Category record);
 
-    /**
-     * 对清单分类的名称进行修改
-     * */
-    void updateCategory(Category category);
+    int insertSelective(Category record);
 
+    List<Category> selectByExample(CategoryExample example);
+
+    Category selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") Category record, @Param("example") CategoryExample example);
+
+    int updateByExample(@Param("record") Category record, @Param("example") CategoryExample example);
+
+    int updateByPrimaryKeySelective(Category record);
+
+    int updateByPrimaryKey(Category record);
 }
