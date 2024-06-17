@@ -27,7 +27,7 @@ class CategoryMapperTest {
      */
     @Test
     void getAllCategory(){
-        List<Category> allCategory = categoryMapper.getAllCategory();
+        List<Category> allCategory = categoryMapper.selectByExample(null);
         allCategory.stream().forEach(System.out::println);
     }
 
@@ -40,7 +40,7 @@ class CategoryMapperTest {
         category.setId(2);
         category.setName("论文写作");
         category.setCreateTime(LocalDateTime.now());
-        categoryMapper.addCategory(category);
+        categoryMapper.insertSelective(category);
     }
 
     /**
@@ -48,7 +48,7 @@ class CategoryMapperTest {
      */
     @Test
     void deleteCategoryById() {
-        categoryMapper.deleteCategoryById(87);
+        categoryMapper.deleteByPrimaryKey(87);
     }
 
     /**
@@ -60,6 +60,6 @@ class CategoryMapperTest {
         category.setId(2);
         category.setName("SpringBoot学习");
         category.setUpdateTime(LocalDateTime.now());
-        categoryMapper.updateCategory(category);
+        categoryMapper.updateByPrimaryKeySelective(category);
     }
 }
