@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class CategoryController {
 
-    @Autowired(required = false)
+    @Autowired(required = true)
     private CategoryMapper categoryMapper;
 
     @ApiOperation("查询所有清单")
