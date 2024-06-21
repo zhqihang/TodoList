@@ -34,11 +34,11 @@ public class DruidConfig {
         ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         Map<String,String> initParams = new HashMap<>();
         //账号
-        initParams.put("loginUsername","admin");
+        initParams.put("loginUsername","root");
         //密码
         initParams.put("loginPassword","123456");
         //登陆许可ip 不支持IPV6
-        initParams.put("deny","172.19.162.111");
+        // initParams.put("deny","172.19.162.111");
         initParams.put("allow","127.0.0.1");
         initParams.put("resetEnable","false");
         bean.setInitParameters(initParams);
