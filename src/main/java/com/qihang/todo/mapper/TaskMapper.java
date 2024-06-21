@@ -3,8 +3,11 @@ package com.qihang.todo.mapper;
 import com.qihang.todo.entity.Task;
 import com.qihang.todo.entity.TaskExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface TaskMapper {
     long countByExample(TaskExample example);
 

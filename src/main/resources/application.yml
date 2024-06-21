@@ -1,6 +1,8 @@
 spring:
+  profiles:
+    active: dev
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/todolist?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/todoList?characterEncoding=utf8&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -30,33 +32,46 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
       filters: stat,wall,log4j2
-#      stat-view-servlet:
-#        # 是否开启监控页面，，为了安全起见1.1.10后默认为关闭
-#        enabled: true
-#        login-username: druid
-#        login-password: druid
-
+  #      stat-view-servlet:
+  #        # 是否开启监控页面，，为了安全起见1.1.10后默认为关闭
+  #        enabled: true
+  #        login-username: druid
+  #        login-password: druid
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    # #开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+---
+spring:
+  profiles: dev
 ## 日志级别
 logging:
   level:
     com:
       qihang:
-        mapper: debug
+        todo:
+          mapper: debug
+          controller: debug
 
 mybatis:
   type-aliases-package: com.qihang.todo.entity
-#  mapper-locations: classpath*:mapper/*Mapper.xml
+  ## 检查 mybatis 配置是否存在，一般命名为 mybatis-config.xml
+  # check-config-location: true
+  ## 配置文件位置
+  # config-location: classpath:mybatis/mybatis-config.xml
+  # mapper xml文件地址
   mapper-locations: classpath:mapper/*.xml
   configuration:
-    ## 开启mybatis驼峰命名映射，不然取得时间的值为空
+    ## 开启mybatis驼峰命名映射，不然取得时间的值为空-->
     map-underscore-to-camel-case: true
+server:
+  port: 8081
 
-
-# 配置 thymeleaf
-thymeleaf:
-  mode: HTML5
-  encoding: UTF-8
-  # #开发时关闭缓存,不然没法看到实时页面
-  cache: false
-  prefix: classpath:/templates/
-  suffix: .html
+---
+spring:
+  profiles: test
+server:
+  port: 9000

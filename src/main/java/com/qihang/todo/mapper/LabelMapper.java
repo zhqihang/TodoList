@@ -3,8 +3,11 @@ package com.qihang.todo.mapper;
 import com.qihang.todo.entity.Label;
 import com.qihang.todo.entity.LabelExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface LabelMapper {
     long countByExample(LabelExample example);
 

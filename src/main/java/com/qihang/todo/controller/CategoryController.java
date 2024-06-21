@@ -1,11 +1,15 @@
 package com.qihang.todo.controller;
 
+import com.qihang.todo.common.api.Result;
 import com.qihang.todo.entity.Category;
+import com.qihang.todo.entity.TaskExample;
 import com.qihang.todo.mapper.CategoryMapper;
+import com.qihang.todo.mapper.TaskMapper;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -15,47 +19,55 @@ import java.util.List;
  * @Description: 清单控制层
  *
  */
-@Api(tags = "清单管理")
+@Api(tags = "清单信息管理")
 @RequestMapping("/category")
 @RestController
 public class CategoryController {
-
-    @Autowired(required = true)
+    @Autowired
     private CategoryMapper categoryMapper;
 
-    @ApiOperation("查询所有清单")
+    @Autowired
+    private TaskMapper taskMapper;
+
+    @ApiOperation("查询所有的清单")
     @GetMapping("/getAllCategory")
-    List<Category> getAllCategory(){
+    Result<List<Category>> getAllCategory() {
         List<Category> categories = categoryMapper.selectByExample(null);
-        return categories;
+        return Result.success(categories);
     }
 
+    @PostMapping("/add")
     @ApiOperation("添加一个清单分类")
-    @PostMapping("/addCategory")
     @ApiResponse(code = 1, message = "添加成功")
     @ApiImplicitParam(name = "category", required = true, paramType = "query")
-    int addCategory(Category category){
-        return categoryMapper.insertSelective(category);
+    Result addCategory(@ApiParam("添加的清单") @RequestBody Category category) {
+        int i = categoryMapper.insertSelective(category);
+        return i != 0 ? Result.success(null) : Result.failed();
     }
 
-    @ApiOperation("根据id删除清单分类")
-    @DeleteMapping("/deleteCategoryById/{id}")
+    @DeleteMapping("/del/{id}")
+    @ApiOperation("根据id删除一个清单分类")
     @ApiImplicitParam(name = "id", value = "清单ID", required = true, paramType = "path")
-    @ApiResponses({
-            @ApiResponse(code = 0, message = "删除失败"),
-            @ApiResponse(code = 1, message = "删除成功")
-    })
-    int deleteCategoryById(int id){
-        return categoryMapper.deleteByPrimaryKey(id);
+    @ApiResponses({@ApiResponse(code = 0, message = "删除记录不存在"), @ApiResponse(code = 1, message = "删除成功"),})
+    Result deleteCategoryById(@PathVariable("id") int id, HttpSession session) {
+        // 删除分类下的所有任务
+        TaskExample taskExample = new TaskExample();
+        TaskExample.Criteria criteria = taskExample.createCriteria();
+        criteria.andCategoryIdEqualTo(id);
+        taskMapper.deleteByExample(taskExample);
+        int i = categoryMapper.deleteByPrimaryKey(id);
+        if (i != 0) {
+            session.setAttribute("categoryLists", null);
+        }
+        return i != 0 ? Result.success(null) : Result.failed();
     }
 
-
-    @ApiOperation("更新清单")
     @PutMapping("/updateCategory")
+    @ApiOperation("更新清单")
     @ApiResponse(code = 1, message = "修改成功")
     @ApiImplicitParam(name = "category", value = "清单对象", required = true, paramType = "query")
-    int updateCategory(Category category){
-        return categoryMapper.updateByPrimaryKeySelective(category);
+    Result updateCategory(@RequestBody Category category) {
+        int i = categoryMapper.updateByPrimaryKeySelective(category);
+        return i != 0 ? Result.success(null) : Result.failed();
     }
-
 }

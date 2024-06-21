@@ -3,9 +3,11 @@ package com.qihang.todo.mapper;
 import com.qihang.todo.entity.Category;
 import com.qihang.todo.entity.CategoryExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-
+@Mapper
 public interface CategoryMapper {
 
     long countByExample(CategoryExample example);

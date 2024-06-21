@@ -3,8 +3,11 @@ package com.qihang.todo.mapper;
 import com.qihang.todo.entity.User;
 import com.qihang.todo.entity.UserExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface UserMapper {
     long countByExample(UserExample example);
 
